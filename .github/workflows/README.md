@@ -1,4 +1,5 @@
 Develop on feature/* or bugfix/* or hotfix/* branches
 Open PR when done
-Review and merge PR to main manually
-GH Actions will merge main to staging and perform E2E tests.
+Review and merge PR to develop manually
+GH Actions will merge develop to staging and perform E2E tests.
+

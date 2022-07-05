@@ -1,4 +1,4 @@
-name: Build & Test Domain API
+name: Build & Test API-2
 
 on:
   push:
@@ -7,10 +7,10 @@ on:
       - bugfix/*
       - hotfix/*
     paths:
-      - 'packages/web-api/**'
+      - 'packages/api-2/**'
 
 jobs:
   build_and_test:
     uses: 'iago-srm/language-app/.github/workflows/reusable-build-and-test.yml@main'
     with:
-      package: 'web-api'
+      package: 'api-2'
