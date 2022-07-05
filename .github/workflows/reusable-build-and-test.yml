@@ -1,0 +1,35 @@
+name: Build and test a Nodejs API
+
+on:
+  workflow_call:
+    inputs:
+      package:
+        required: true
+        type: string
+    # secrets:
+    #   token:
+    #     required: true
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Install Dependencies
+        run: npm run install:ci
+
+      # - name: Ensure code formatting
+      #   working-directory: './packages/${{ inputs.package }}'
+      #   run: npm run format:ci
+
+      - name: Tests
+        working-directory: './packages/${{ inputs.package }}'
+        run: npm run test:ci

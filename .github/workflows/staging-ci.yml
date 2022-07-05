@@ -1,0 +1,31 @@
+name: Deploy whole stack to Staging and Perform E2E tests
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'packages/api-1/**'
+      - 'packages/api-2/**'
+      - 'packages/web-app/**'
+      - 'packages/common/**'
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@master
+
+      - name: Merge develop -> staging
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: develop
+          target_branch: staging
+          github_token: ${{ github.token }}
+
+      - name: Integration tests
+        working-directory: './packages/web-app'
+        run: npm run tests:integration
+

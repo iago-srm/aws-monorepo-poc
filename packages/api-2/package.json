@@ -1,12 +1,21 @@
 {
-  "name": "app-2",
+  "name": "api-2",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --watchAll",
+    "test:ci": "jest",
+    "start": "node -r ts-node/register/transpile-only ./build/index.js",
+    "build": "tsc",
+    "dev": "ts-node-dev ./src/index.ts",
+    "docker:build": "docker build -t aws-monorepo-poc-api-2 -f ./Dockerfile ../.."
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1167.0",
+    "express-async-errors": "^3.1.1"
+  }
 }

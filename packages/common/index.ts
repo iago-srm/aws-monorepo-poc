@@ -1,3 +1,3 @@
 export const commonFunction = () => {
-    console.log("commonFunction");
+    return "commonFunction";
 }
