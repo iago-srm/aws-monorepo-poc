@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY ./package*.json ./
 COPY ./tsconfig.json ./
-COPY ./packages/auth-web-api/ ./packages/auth-web-api/
+COPY ./packages/api-1/ ./packages/api-1/
 COPY ./packages/common/ ./packages/common/
 
 RUN npm i
