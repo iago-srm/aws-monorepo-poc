@@ -9,7 +9,7 @@ COPY ./packages/common/ ./packages/common/
 
 RUN npm i
 
-WORKDIR /app/packages/auth-web-api
+WORKDIR /app/packages/api-1
 
 RUN npm run build
 
