@@ -37,3 +37,7 @@ jobs:
       - name: Build
         working-directory: './packages/${{ inputs.package }}'
         run: npm run build
+
+      - name: Build and Deploy Docker image to ECR
+        working-directory: './packages/${{ inputs.package }}'
+        run: npm run build
