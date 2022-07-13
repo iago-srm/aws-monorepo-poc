@@ -3,7 +3,7 @@ import app from '../src/index';
 
 describe("Integration test", () => {
     test("First test", async () => {
-        const response = await request(app).get('/ping');
-        expect(response).toBe("Pong");
+        const response = await request(app).get('/test');
+        expect(response.text).toBe("pong");
     })
 })

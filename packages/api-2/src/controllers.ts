@@ -7,9 +7,25 @@ export const Ping = (req, res) => res.send('pong');
 
 export const Test = async (req: Request, res: Response) => {
     AWS.config.update({ region: 'us-west-2' });
+
     const s3 = new AWS.S3({apiVersion: '2006-03-01'});
     const listBuckets = promisify(s3.listBuckets.bind(s3));
     const buckets = await listBuckets();
+    
+    const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
+    const sendMessage = promisify(sqs.sendMessage.bind(sqs));
+    const message = {
+        // Remove DelaySeconds parameter and value for FIFO queues
+       DelaySeconds: 10,
+       MessageBody: {
+           attr: 1,
+           attr2: "nome",
+           attr3: [1,2,3]
+       },
+       QueueUrl: process.env.SQS_URL
+     };
+    const response = await sendMessage(message);
+    
     return res.send(`
         Server 2 | 
         ${commonFunction()} | 

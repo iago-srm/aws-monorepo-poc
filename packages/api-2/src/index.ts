@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { AddressInfo } from "net";
-import { Ping, Test } from './ping';
+import { Ping, Test } from './controllers';
 import dotenv from 'dotenv';
 import 'express-async-errors';
 
