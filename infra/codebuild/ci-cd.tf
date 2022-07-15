@@ -33,6 +33,11 @@ resource "aws_codebuild_project" "api-2" {
       value = "553239741950"
     }
 
+    environment_variable {
+      name  = "IMAGE_REPO_NAME"
+      value = "aws-monorepo-poc/api-2"
+    }
+
   }
 
   logs_config {
