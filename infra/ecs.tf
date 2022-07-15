@@ -1,9 +1,9 @@
 resource "aws_ecs_cluster" "main" {
-  name = "main"
+  name = "${var.name}-ecs-cluster-${var.environment}"
 }
 
 resource "aws_security_group" "ecs_security_group" {
-  # id = aws_vpc.main.id
+
   vpc_id = aws_vpc.main.id
 
   ingress {
@@ -30,93 +30,72 @@ resource "aws_security_group" "ecs_security_group" {
   }
 }
 
-resource "aws_launch_configuration" "container_instances" {
-  name_prefix          = "aws-monorepo-poc-ecs-"
-  image_id             = data.aws_ami.aws_optimized_ecs.id
-  instance_type        = "t2.micro"
-  security_groups      = [aws_security_group.ecs_security_group.id]
-  iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
-  user_data            = <<EOF
-     #!/bin/bash -xe
-    echo ECS_CLUSTER=${aws_ecs_cluster.main.id} >> /etc/ecs/ecs.config
-    yum install -y aws-cfn-bootstrap
-    /opt/aws/bin/cfn-signal -e $? --stack aws-monorepo-poc --resource ECSAutoScalingGroup --region us-east-1
-    EOF
-  #   lifecycle {
-  #     create_before_destroy = true
-  #   }
+
+resource "aws_appautoscaling_target" "ecs_target" {
+  max_capacity       = 4
+  min_capacity       = 1
+  resource_id        = "service/${aws_ecs_cluster.main.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
 }
 
-resource "aws_autoscaling_group" "ecs-asg" {
-  desired_capacity     = 2
-  max_size             = 2
-  min_size             = 1
-  launch_configuration = aws_launch_configuration.container_instances.name
-  vpc_zone_identifier  = [aws_subnet.public_one.id, aws_subnet.public_two.id]
-}
-
-resource "aws_ecs_task_definition" "service" {
-  family = "service"
+resource "aws_ecs_task_definition" "api-1-td" {
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                      = 256
+  memory                   = 512
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  task_role_arn            = aws_iam_role.ecs_task_role.arn
   container_definitions = jsonencode([
     {
-      name      = "api"
-      image     = "553239741950.dkr.ecr.us-east-1.amazonaws.com/aws-monorepo-poc:v1"
-      # cpu       = 10
-      # memory    = 256
+      name  = "api-1"
+      image = "553239741950.dkr.ecr.us-east-1.amazonaws.com/aws-monorepo-poc/api-1:v1"
       essential = true
+      environment = "${var.environment}"
       portMappings = [
         {
-          containerPort = 3000
-          hostPort      = 0
+          protocol = "tcp"
+          containerPort = 3008
+          hostPort      = 3008
         }
       ]
-    },
-    # {
-    #   name      = "second"
-    #   image     = "service-second"
-    #   cpu       = 10
-    #   memory    = 256
-    #   essential = true
-    #   portMappings = [
-    #     {
-    #       containerPort = 443
-    #       hostPort      = 443
-    #     }
-    #   ]
-    # }
+    }
   ])
-
-  # volume {
-  #   name      = "service-storage"
-  #   host_path = "/ecs/service-storage"
-  # }
-
-  # placement_constraints {
-  #   type       = "memberOf"
-  #   expression = "attribute:ecs.availability-zone in [us-east-1a, us-east-1b]"
-  # }
 }
 
-resource "aws_ecs_service" "ec2" {
-  name="api"
-  launch_type = "EC2"
-  cluster         = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition.service.arn
-  desired_count   = 1
-  iam_role        = aws_iam_role.ecs_service_role.arn
-  # ordered_placement_strategy {
-  #   type  = "binpack"
-  #   field = "cpu"
-  # }
+resource "aws_alb_target_group" "api-1" {
+  name        = "${var.name}-api-1-tg-${var.environment}"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.main.id
+  target_type = "ip"
+ 
+  health_check {
+   healthy_threshold   = "3"
+   interval            = "30"
+   protocol            = "HTTP"
+   matcher             = "200"
+   timeout             = "3"
+   path                = "/ping"
+   unhealthy_threshold = "2"
+  }
+}
 
+resource "aws_ecs_service" "api-1" {
+  name            = "api-1"
+  launch_type     = "FARGATE"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.api-1-td.arn
+  desired_count   = 1
+  scheduling_strategy                = "REPLICA"
+  
   load_balancer {
-    target_group_arn = aws_lb_target_group.alb_tg.arn
-    container_name   = "api"
+    target_group_arn = aws_alb_target_group.api-1.arn
+    container_name   = "api-1"
     container_port   = 8080
   }
-
-  placement_constraints {
-    type       = "memberOf"
-    expression = "attribute:ecs.availability-zone in [us-west-2a, us-west-2b]"
-  }
+  
+  lifecycle {
+   ignore_changes = [task_definition, desired_count]
+ }
 }

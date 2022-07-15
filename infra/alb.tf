@@ -38,11 +38,11 @@ resource "aws_lb" "alb" {
 
   enable_deletion_protection = true
 
-#   access_logs {
-#     bucket  = aws_s3_bucket.ecs_alb_logs_bucket.bucket
-#     prefix  = "ecs-alb"
-#     enabled = true
-#   }
+  #   access_logs {
+  #     bucket  = aws_s3_bucket.ecs_alb_logs_bucket.bucket
+  #     prefix  = "ecs-alb"
+  #     enabled = true
+  #   }
 
   tags = var.tags
 }
@@ -55,10 +55,10 @@ resource "aws_lb_target_group" "alb_tg" {
   vpc_id   = aws_vpc.main.id
 
   health_check {
-    healthy_threshold = 2
+    healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout = 5
-    interval = 6
+    timeout             = 5
+    interval            = 6
   }
 }
 
