@@ -10,7 +10,8 @@
     "build": "tsc",
     "dev": "ts-node-dev ./src/index.ts",
     "docker:build": "docker build -t aws-monorepo-poc-api-2 -f ./Dockerfile ../..",
-    "docker:tag": "docker tag aws-monorepo-poc-api-2:latest 553239741950.dkr.ecr.us-east-1.amazonaws.com/aws-monorepo-poc/api-2:v1"
+    "docker:tag": "docker tag aws-monorepo-poc-api-2:latest 553239741950.dkr.ecr.us-east-1.amazonaws.com/aws-monorepo-poc/api-2:v1",
+    "ecr:push": "docker push 553239741950.dkr.ecr.us-east-1.amazonaws.com/aws-monorepo-poc/api-2:latest"
   },
   "keywords": [],
   "author": "",
