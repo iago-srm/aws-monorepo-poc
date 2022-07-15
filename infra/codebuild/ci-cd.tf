@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "build_cache" {
 }
 
 resource "aws_codebuild_project" "api-2" {
-  name          = "${var.name}-codebuild-api2-${var.environment}"
+  name          = "${var.name}-api-2-${var.environment}"
   build_timeout = "5"
   service_role  = aws_iam_role.api-2_codebuild.arn
 
