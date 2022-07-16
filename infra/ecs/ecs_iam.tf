@@ -39,7 +39,7 @@ resource "aws_iam_role" "asg_role" {
 
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "${var.name}-ecsTaskExecutionRole"
- 
+
   assume_role_policy = <<EOF
 {
  "Version": "2012-10-17",
@@ -56,7 +56,7 @@ resource "aws_iam_role" "ecs_task_execution_role" {
 }
 EOF
 }
- 
+
 resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-policy-attachment" {
   role       = aws_iam_role.ecs_task_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
@@ -64,7 +64,7 @@ resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-policy-attach
 
 resource "aws_iam_role" "ecs_task_role" {
   name = "${var.name}-ecsTaskRole"
- 
+
   assume_role_policy = <<EOF
 {
  "Version": "2012-10-17",
@@ -81,12 +81,12 @@ resource "aws_iam_role" "ecs_task_role" {
 }
 EOF
 }
- 
+
 resource "aws_iam_policy" "sqs" {
   name        = "${var.name}-task-policy-sqs"
   description = "Policy that allows access to SQS"
- 
- policy = <<EOF
+
+  policy = <<EOF
 {
    "Version": "2012-10-17",
    "Statement": [
@@ -101,7 +101,7 @@ resource "aws_iam_policy" "sqs" {
 }
 EOF
 }
- 
+
 resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment" {
   role       = aws_iam_role.ecs_task_role.name
   policy_arn = aws_iam_policy.sqs.arn

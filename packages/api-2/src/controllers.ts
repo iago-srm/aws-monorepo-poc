@@ -3,7 +3,7 @@ import { commonFunction } from 'common';
 import AWS, { S3 } from 'aws-sdk';
 import { promisify } from 'util';
 
-export const Ping = (req, res) => res.send('Pong');
+export const Ping = (req, res) => res.send('Pong - Server 2');
 
 export const Test = async (req: Request, res: Response) => {
     AWS.config.update({ region: 'us-west-2' });
