@@ -7,6 +7,14 @@ resource "aws_security_group" "ecs_security_group" {
   vpc_id = aws_vpc.main.id
 
   ingress {
+    description = "HTTPS inbound"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
     description = "HTTP inbound"
     from_port   = 80
     to_port     = 80
@@ -14,37 +22,27 @@ resource "aws_security_group" "ecs_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    description = "HTTP inbound"
-    from_port   = 3008
-    to_port     = 3008
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "SSH inbound"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   # ingress {
-  #   description = "ALB"
-  #   from_port   = 31000
-  #   to_port     = 61000
+  #   description = "SSH inbound"
+  #   from_port   = 22
+  #   to_port     = 22
   #   protocol    = "tcp"
+  #   cidr_blocks = ["0.0.0.0/0"]
   # }
-}
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-resource "aws_appautoscaling_target" "ecs_target" {
-  max_capacity       = 1
-  min_capacity       = 1
-  resource_id        = "service/${aws_ecs_cluster.main.name}"
-  scalable_dimension = "ecs:service:DesiredCount"
-  service_namespace  = "ecs"
+  ingress {
+    from_port   = 8
+    to_port     = 0
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_ecs_task_definition" "api-1-td" {
@@ -57,9 +55,9 @@ resource "aws_ecs_task_definition" "api-1-td" {
   task_role_arn            = aws_iam_role.ecs_task_role.arn           # to access AWS Services
   container_definitions = jsonencode([
     {
-      name        = "api-1"
-      image       = "553239741950.dkr.ecr.us-east-1.amazonaws.com/aws-monorepo-poc/api-1:latest"
-      essential   = true
+      name      = "api-1"
+      image     = "553239741950.dkr.ecr.us-east-1.amazonaws.com/aws-monorepo-poc/api-1:latest"
+      essential = true
       portMappings = [
         {
           protocol      = "tcp"
@@ -82,8 +80,8 @@ resource "aws_ecs_service" "api-1" {
   scheduling_strategy                = "REPLICA"
 
   network_configuration {
-    security_groups  = [aws_security_group.ecs_security_group.arn]
-    subnets          = [aws_subnet.public.id, aws_subnet.private.id]
+    security_groups  = [aws_security_group.ecs_security_group.id]
+    subnets          = [aws_subnet.private.id]
     assign_public_ip = false
   }
 

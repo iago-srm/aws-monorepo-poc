@@ -19,19 +19,17 @@ resource "aws_security_group" "alb_sg" {
   }
 
   ingress {
-    protocol         = "tcp"
-    from_port        = 3008
-    to_port          = 3008
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    from_port   = 8
+    to_port     = 0
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    protocol         = "-1"
-    from_port        = 0
-    to_port          = 0
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -40,44 +38,10 @@ resource "aws_lb" "main" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = [aws_subnet.public.id, aws_subnet.public.id]
+  subnets            = [aws_subnet.public_one.id, aws_subnet.public_two.id]
 
   enable_deletion_protection = false
 }
-
-resource "aws_alb_target_group" "api-1" {
-  name        = "${var.name}-tg-${var.environment}"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = aws_vpc.main.id
-  target_type = "ip"
-
-  health_check {
-    healthy_threshold   = "3"
-    interval            = "30"
-    protocol            = "HTTP"
-    matcher             = "200"
-    timeout             = "3"
-    path                = "/"
-    unhealthy_threshold = "2"
-  }
-}
-
-# resource "aws_alb_listener" "http" {
-#   load_balancer_arn = aws_lb.main.id
-#   port              = 80
-#   protocol          = "HTTP"
-
-#   default_action {
-#    type = "redirect"
-
-#    redirect {
-#      port        = 443
-#      protocol    = "HTTPS"
-#      status_code = "HTTP_301"
-#    }
-#   }
-# }
 
 resource "aws_alb_listener" "http" {
   load_balancer_arn = aws_lb.main.arn
@@ -85,7 +49,28 @@ resource "aws_alb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
+    type = "redirect"
+
+    redirect {
+      port        = 443
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+resource "aws_alb_listener" "https" {
+  load_balancer_arn = aws_lb.main.arn
+  port              = 443
+  protocol          = "HTTPS"
+  certificate_arn   = aws_acm_certificate_validation.alb-ssl.arn
+
+  default_action {
     target_group_arn = aws_alb_target_group.api-1.arn
     type             = "forward"
   }
+}
+
+output "alb_dns" {
+  value = aws_lb.main.dns_name
 }
