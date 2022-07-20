@@ -1,11 +1,11 @@
-resource "aws_alb_target_group" "api-1" {
+resource "aws_alb_target_group" "this" {
   name        = "${var.name}-tg-${var.environment}"
   port        = 80
   protocol    = "HTTP"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.vpc_id
   target_type = "ip"
 
-  depends_on = [aws_lb.main]
+  depends_on = [var.alb_id]
 
   health_check {
     healthy_threshold   = "3"
@@ -16,4 +16,6 @@ resource "aws_alb_target_group" "api-1" {
     path                = "/"
     unhealthy_threshold = "2"
   }
+
+  tags = var.tags
 }

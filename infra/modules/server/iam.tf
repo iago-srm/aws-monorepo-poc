@@ -1,6 +1,5 @@
-
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "${var.name}-ecsTaskExecutionRole"
+  name = "${var.name}-ecsTaskExecutionRole-${var.server-name}-${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -25,7 +24,7 @@ resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-policy-attach
 }
 
 resource "aws_iam_role" "ecs_task_role" {
-  name = "${var.name}-ecsTaskRole"
+  name = "${var.name}-ecsTaskRole-${var.server-name}-${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -45,7 +44,7 @@ EOF
 }
 
 resource "aws_iam_policy" "sqs" {
-  name        = "${var.name}-task-policy-sqs"
+  name        = "${var.name}-task-policy-sqs-${var.server-name}-${var.environment}"
   description = "Policy that allows access to SQS"
 
   policy = <<EOF

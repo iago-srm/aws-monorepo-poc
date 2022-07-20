@@ -1,6 +1,6 @@
 resource "aws_security_group" "alb_sg" {
   name   = "${var.name}-sg-alb-${var.environment}"
-  vpc_id = aws_vpc.main.id
+  vpc_id = var.vpc_id
 
   ingress {
     protocol         = "tcp"
@@ -38,39 +38,20 @@ resource "aws_lb" "main" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = [aws_subnet.public_one.id, aws_subnet.public_two.id]
+  subnets            = var.subnet_ids[*]
 
   enable_deletion_protection = false
 }
 
-resource "aws_alb_listener" "http" {
-  load_balancer_arn = aws_lb.main.arn
-  port              = 80
-  protocol          = "HTTP"
-
-  default_action {
-    type = "redirect"
-
-    redirect {
-      port        = 443
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
-    }
-  }
-}
-
-resource "aws_alb_listener" "https" {
-  load_balancer_arn = aws_lb.main.arn
-  port              = 443
-  protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate_validation.alb-ssl.arn
-
-  default_action {
-    target_group_arn = aws_alb_target_group.api-1.arn
-    type             = "forward"
-  }
-}
 
 output "alb_dns" {
   value = aws_lb.main.dns_name
+}
+
+output "alb_arn" {
+  value = aws_lb.main.arn
+}
+
+output "alb" {
+  value = aws_lb.main
 }

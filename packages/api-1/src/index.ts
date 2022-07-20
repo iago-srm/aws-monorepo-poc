@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { AddressInfo } from "net";
-import { Ping, HealthCheck } from './ping';
+import { Ping, HealthCheck } from './controllers';
 
 const app = express();
 

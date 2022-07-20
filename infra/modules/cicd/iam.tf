@@ -1,5 +1,5 @@
-resource "aws_iam_role" "api-2_codebuild" {
-  name = "api-2_codebuild"
+resource "aws_iam_role" "this" {
+  name = "${var.name}-codebuild-${var.server-name}-${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -15,10 +15,12 @@ resource "aws_iam_role" "api-2_codebuild" {
   ]
 }
 EOF
+
+  tags = var.tags
 }
 
-resource "aws_iam_role_policy" "api-2_codebuild" {
-  role = aws_iam_role.api-2_codebuild.name
+resource "aws_iam_role_policy" "this" {
+  role = aws_iam_role.this.name
 
   policy = jsonencode(
 {

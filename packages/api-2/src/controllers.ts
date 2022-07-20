@@ -5,6 +5,12 @@ import { promisify } from 'util';
 
 export const Ping = (req, res) => res.send('Pong - Server 2');
 
+
+export const HealthCheck = (req: Request, res: Response) => {
+    
+    return res.sendStatus(200);
+}
+
 export const Test = async (req: Request, res: Response) => {
     AWS.config.update({ region: 'us-west-2' });
 

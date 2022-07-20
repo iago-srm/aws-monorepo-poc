@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { AddressInfo } from "net";
-import { Ping, Test } from './controllers';
+import { Ping, Test, HealthCheck } from './controllers';
 import dotenv from 'dotenv';
 import 'express-async-errors';
 
@@ -22,5 +22,6 @@ const server = app.listen(process.env.PORT || 3003, () => {
 
 app.get('/test', Test);
 app.get('/ping', Ping);
+app.get('/', HealthCheck);
 
 export default app;
