@@ -11,13 +11,14 @@ resource "aws_ecs_task_definition" "this" {
       name      = "${var.name}"
       image     = "${var.container_image}"
       logConfiguration = {
-            "logDriver": "awslogs",
-            "options": {
-                "awslogs-region" : "us-east-1",
-                "awslogs-group" : "stream-to-log-fluentd",
-                "awslogs-stream-prefix" : "${var.name}"
-            }
-        },
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-region" : "us-east-1",
+            "awslogs-group" : "stream-to-log-fluentd",
+            "awslogs-stream-prefix" : "${var.name}",
+            "awslogs-create-group": "true",
+        }
+      },
       essential = true
       portMappings = [
         {
@@ -98,10 +99,6 @@ resource "aws_ecs_service" "this" {
     target_group_arn = aws_alb_target_group.this.arn
     container_name   = "${var.name}"
     container_port   = var.container_port
-  }
-
-  lifecycle {
-    ignore_changes = [task_definition, desired_count]
   }
 
   tags = var.tags

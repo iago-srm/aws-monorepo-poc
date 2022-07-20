@@ -1,6 +1,21 @@
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "${var.name}-ecsTaskExecutionRole-${var.server-name}-${var.environment}"
 
+inline_policy {
+    name = "allow_create_log_groups"
+
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Action   = ["logs:CreateLogGroup"]
+          Effect   = "Allow"
+          Resource = "*"
+        },
+      ]
+    })
+  }
+
   assume_role_policy = <<EOF
 {
  "Version": "2012-10-17",
