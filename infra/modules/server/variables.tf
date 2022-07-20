@@ -35,7 +35,7 @@ variable "container_image" {
 
 variable "container_port" { 
   type = number
-  default = 3008
+  default = 3006
 }
 
 variable "alb_id" {

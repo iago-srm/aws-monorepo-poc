@@ -13,6 +13,8 @@ WORKDIR /app/packages/api-1
 
 RUN npm run build
 
+ENV PORT=3006
+
 EXPOSE 3006
 
 # ENTRYPOINT ["tail", "-f", "/dev/null"]
