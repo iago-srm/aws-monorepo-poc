@@ -8,13 +8,13 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn            = aws_iam_role.ecs_task_role.arn           # to access AWS Services
   container_definitions = jsonencode([
     {
-      name      = "${var.name}"
+      name      = "${var.server-name}"
       image     = "${var.container_image}"
       logConfiguration = {
         "logDriver": "awslogs",
         "options": {
             "awslogs-region" : "us-east-1",
-            "awslogs-group" : "stream-to-log-fluentd",
+            "awslogs-group" : "${var.name}-${var.server-name}-${var.environment}",
             "awslogs-stream-prefix" : "${var.name}",
             "awslogs-create-group": "true",
         }
@@ -97,7 +97,7 @@ resource "aws_ecs_service" "this" {
 
   load_balancer {
     target_group_arn = aws_alb_target_group.this.arn
-    container_name   = "${var.name}"
+    container_name   = var.server-name
     container_port   = var.container_port
   }
 
