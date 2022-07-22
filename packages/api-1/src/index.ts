@@ -21,4 +21,4 @@ const server = app.listen(process.env.PORT || 3008, () => {
 });
 
 app.get('/', HealthCheck);
-app.get('/ping', Ping);
+app.get('/api-1/ping', Ping);
