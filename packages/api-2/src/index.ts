@@ -23,5 +23,3 @@ const server = app.listen(process.env.PORT || 3008, () => {
 app.get('/test', Test);
 app.get('/api-2/ping', Ping);
 app.get('/', HealthCheck);
-
-export default app;
