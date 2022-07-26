@@ -45,13 +45,13 @@ terraform {
     }
   }
 
-  # backend "s3" {
-  #   bucket = "terraform-state-aws-monorepo-poc"
-  #   key            = "global/s3/staging.tfstate"
-  #   region         = "us-east-1"
-  #   dynamodb_table = "terraform-locks-aws-monorepo-poc-staging"
-  #   encrypt        = true
-  # }
+  backend "s3" {
+    bucket = "terraform-state-aws-monorepo-poc"
+    key            = "global/s3/staging.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "terraform-locks-aws-monorepo-poc-staging"
+    encrypt        = true
+  }
 }
 
 provider "aws" {

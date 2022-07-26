@@ -9,6 +9,7 @@ resource "aws_codebuild_project" "this" {
   service_role  = aws_iam_role.this.arn
 
   artifacts {
+    # type = "CODEPIPELINE"
     type = "NO_ARTIFACTS"
   }
 
@@ -53,7 +54,8 @@ resource "aws_codebuild_project" "this" {
   }
 
   source {
-    type            = "GITHUB"
+    type = "GITHUB"
+    # type            = "CODEPIPELINE"
     location        = "https://github.com/iago-srm/aws-monorepo-poc.git"
     git_clone_depth = 1
     buildspec       = "packages/${var.server-name}/buildspec.yml"
@@ -62,6 +64,21 @@ resource "aws_codebuild_project" "this" {
   tags = var.tags
 }
 
+# resource "aws_codepipeline_webhook" "bar" {
+#   name            = "develop-staging-webhook-github"
+#   authentication  = "GITHUB_HMAC"
+#   target_action   = "Source"
+#   target_pipeline = aws_codepipeline.this.name
+
+#   authentication_configuration {
+#     secret_token = local.webhook_secret
+#   }
+
+#   filter {
+#     json_path    = "$.ref"
+#     match_equals = "refs/heads/develop"
+#   }
+# }
 resource "aws_codebuild_webhook" "example" {
   project_name = aws_codebuild_project.this.name
   build_type   = "BUILD"
