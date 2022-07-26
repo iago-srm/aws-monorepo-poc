@@ -1,6 +1,6 @@
 resource "aws_ecs_task_definition" "this" {
   network_mode             = "awsvpc"
-  family                   = "${var.name}-td-${var.server-name}-${var.environment}"
+  family                   = var.server-name
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
   memory                   = 512
@@ -39,29 +39,13 @@ resource "aws_security_group" "ecs_security_group" {
   vpc_id = var.vpc_id
 
   ingress {
-    description = "HTTPS inbound"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
     description = "HTTP inbound"
-    from_port   = 80
-    to_port     = 80
+    from_port   = 3006
+    to_port     = 3006
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  # ingress {
-  #   description = "SSH inbound"
-  #   from_port   = 22
-  #   to_port     = 22
-  #   protocol    = "tcp"
-  #   cidr_blocks = ["0.0.0.0/0"]
-  # }
-
+  
   egress {
     from_port   = 0
     to_port     = 0
@@ -84,7 +68,7 @@ resource "aws_ecs_service" "this" {
   launch_type                        = "FARGATE"
   cluster                            = var.cluster_id
   task_definition                    = aws_ecs_task_definition.this.arn
-  desired_count                      = 1
+  desired_count                      = 0
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
   scheduling_strategy                = "REPLICA"

@@ -10,10 +10,14 @@ variable "environment" {
   type = string
 }
 
-variable "server-name" {
+variable "vpc_id" {
   type = string
 }
 
-variable "project-name" {
+variable "public_subnet_ids" {
+  type = list(string)
+}
+
+variable "db_password" {
   type = string
 }

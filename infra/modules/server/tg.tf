@@ -17,3 +17,7 @@ resource "aws_alb_target_group" "this" {
 
   tags = var.tags
 }
+
+output "tg_arn" {
+  value = aws_alb_target_group.this.arn
+}

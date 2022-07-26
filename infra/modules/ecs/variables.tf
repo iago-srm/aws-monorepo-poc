@@ -10,10 +10,18 @@ variable "environment" {
   type = string
 }
 
+variable "public_subnet_ids" {
+  type = list(string)
+}
+
 variable "vpc_id" {
   type = string
 }
 
-variable "subnet_ids" {
-  type = list(string)
+variable "certificate_arn" {
+  type = string
+}
+
+variable "default_tg_arn" {
+  type = string
 }

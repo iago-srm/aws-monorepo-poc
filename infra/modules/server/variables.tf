@@ -10,18 +10,12 @@ variable "environment" {
   type = string
 }
 
-variable "alb_arn" {
-  type = string
-}
-
 variable "server-name" {
   type = string
 }
 
-
-variable "acm_validation_arn" {
+variable "alb_listener_arn" {
   type = string
-  default = "7"
 }
 
 variable "cluster_id" {
@@ -31,7 +25,6 @@ variable "cluster_id" {
 variable "container_image" { 
   type = string
 }
-
 
 variable "container_port" { 
   type = number
