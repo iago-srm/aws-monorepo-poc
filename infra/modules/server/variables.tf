@@ -42,3 +42,7 @@ variable "vpc_id" {
 variable "subnet_id" {
   type = string
 }
+
+variable "env_database_url" {
+  type = string
+}

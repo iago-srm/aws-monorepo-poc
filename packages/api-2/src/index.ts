@@ -20,6 +20,6 @@ const server = app.listen(process.env.PORT || 3008, () => {
   }
 });
 
-app.get('/test', Test);
+app.post('/api-2/test', Test);
 app.get('/api-2/ping', Ping);
 app.get('/', HealthCheck);

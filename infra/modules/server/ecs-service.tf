@@ -10,6 +10,9 @@ resource "aws_ecs_task_definition" "this" {
     {
       name      = "${var.server-name}"
       image     = "${var.container_image}"
+      environment = [
+        { "Name" = "DATABASE_URL", "Value" = "${var.env_database_url}" }  
+      ]
       logConfiguration = {
         "logDriver": "awslogs",
         "options": {
@@ -40,12 +43,19 @@ resource "aws_security_group" "ecs_security_group" {
 
   ingress {
     description = "HTTP inbound"
-    from_port   = 3006
-    to_port     = 3006
+    from_port   = var.container_port
+    to_port     = var.container_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
   
+  # ingress {
+  #   from_port   = 80
+  #   protocol    = "tcp"
+  #   to_port     = 443
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
+
   egress {
     from_port   = 0
     to_port     = 0

@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import { commonFunction } from 'common';
 import AWS, { S3 } from 'aws-sdk';
 import { promisify } from 'util';
+import { PrismaClient } from '@prisma/client';
 
-export const Ping = (req, res) => res.send(`Pong - Server 2 - v3.1 - ${process.env.DATABASE_URL}`);
+export const Ping = (req, res) => res.send(`Pong - Server 2`);
 
 
 export const HealthCheck = (req: Request, res: Response) => {
@@ -12,11 +13,21 @@ export const HealthCheck = (req: Request, res: Response) => {
 }
 
 export const Test = async (req: Request, res: Response) => {
-    AWS.config.update({ region: 'us-west-2' });
+    AWS.config.update({ region: 'us-east-1' });
 
     const s3 = new AWS.S3({apiVersion: '2006-03-01'});
-    const listBuckets = promisify(s3.listBuckets.bind(s3));
-    const buckets = await listBuckets();
+    const listObjects = promisify(s3.listObjectsV2.bind(s3));
+    const objects = await listObjects({
+        Bucket: process.env.BUCKET_NAME
+    });
+
+    const prisma = new PrismaClient();
+    await prisma.user.create({
+        data: {
+            name: req.body.name,
+            email: req.body.email
+        }
+    });
     
     const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
     const sendMessage = promisify(sqs.sendMessage.bind(sqs));
@@ -35,6 +46,7 @@ export const Test = async (req: Request, res: Response) => {
     return res.send(`
         Server 2 | 
         ${commonFunction()} | 
-        ${JSON.stringify(buckets.Buckets.map(({Name}) => Name))}
+        ${JSON.stringify(response)} |
+        ${JSON.stringify(objects)}
     `);
 }

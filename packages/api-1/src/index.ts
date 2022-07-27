@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { AddressInfo } from "net";
-import { Ping, HealthCheck } from './controllers';
+import { Ping, HealthCheck, Test } from './controllers';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -22,3 +22,4 @@ const server = app.listen(process.env.PORT || 3008, () => {
 
 app.get('/', HealthCheck);
 app.get('/api-1/ping', Ping);
+app.post('/api-1/test', Test);

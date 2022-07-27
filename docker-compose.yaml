@@ -1,0 +1,62 @@
+version: "3"
+
+services:
+
+  api-1:
+    image: aws-monorepo-poc/api-1
+    build: 
+      context: .
+      dockerfile: packages/api-1/Dockerfile
+    container_name: api-1
+    # entrypoint: "npm run dev"
+    entrypoint: "tail -f /dev/null"
+    ports:
+      - "3006:3006"
+      - 5555:5555 # prisma studio
+    environment:
+      - DATABASE_URL=postgres://postgres:supersecret@postgres:5432/api-1
+      - PORT=3006
+      # - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      # - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    tty: true
+    volumes:
+      - ./packages/api-1:/app/packages/api-1
+
+  api-2:
+    image: aws-monorepo-poc/api-2
+    
+    build: 
+      context: .
+      dockerfile: packages/api-1/Dockerfile
+    container_name: api-2
+    # entrypoint: "npm run dev"
+    entrypoint: "tail -f /dev/null"
+    ports:
+      - "3007:3006"
+      - 5556:5555 # prisma studio
+    environment:
+      - DATABASE_URL=postgres://postgres:supersecret@postgres:5432/api-2
+      - PORT=3006
+      # - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      # - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    tty: true
+    volumes:
+      - ./packages/api-2:/app/packages/api-2
+
+  postgres:
+    image: postgres
+    container_name: aws-monorepo-poc-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=supersecret
+    volumes:
+      - ${HOME}/aws-monorepo-poc-postgres-data/:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+

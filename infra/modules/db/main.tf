@@ -71,3 +71,8 @@ output "rds_username" {
   description = "RDS instance root username"
   value       = aws_db_instance.this.username
 }
+
+output "rds_password" {
+  description = "RDS instance root username"
+  value       = aws_db_instance.this.password
+}

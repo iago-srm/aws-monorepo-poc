@@ -64,6 +64,8 @@ module "server-api-1" {
   cluster_id       = module.ecs.cluster_id
   vpc_id           = module.vpc.vpc_id
   subnet_id        = module.vpc.private_subnet_id
+
+  env_database_url = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:5432/api1"
 }
 
 module "server-api-2" {
@@ -80,6 +82,8 @@ module "server-api-2" {
   cluster_id       = module.ecs.cluster_id
   vpc_id           = module.vpc.vpc_id
   subnet_id        = module.vpc.private_subnet_id
+
+  env_database_url = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:5432/api2"
 }
 
 module "db" {
