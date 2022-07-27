@@ -3,7 +3,7 @@ import { commonFunction } from 'common';
 import AWS, { S3 } from 'aws-sdk';
 import { promisify } from 'util';
 
-export const Ping = (req, res) => res.send(`Pong - Server 2 - v3 - ${process.env.DATABASE_URL}`);
+export const Ping = (req, res) => res.send(`Pong - Server 2 - v3.1 - ${process.env.DATABASE_URL}`);
 
 
 export const HealthCheck = (req: Request, res: Response) => {
