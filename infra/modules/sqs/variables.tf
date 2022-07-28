@@ -9,3 +9,7 @@ variable "name" {
 variable "environment" {
   type = string
 }
+
+variable "env_api_url" {
+  type = string
+}

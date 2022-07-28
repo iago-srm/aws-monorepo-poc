@@ -11,9 +11,11 @@ resource "aws_lambda_function" "consumer_lambda" {
 
   environment {
     variables = {
-      foo = "bar"
+      API_URL = var.env_api_url
     }
   }
+
+  tags = var.tags
 }
 
 resource "aws_lambda_event_source_mapping" "sqs-consumer_lambda" {
