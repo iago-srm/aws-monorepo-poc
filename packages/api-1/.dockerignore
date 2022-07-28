@@ -4,5 +4,6 @@
 **/*.spec.*s
 packages/api-2/
 packages/web-app/
+**/infra
 npm-debug.log
 **/generated
