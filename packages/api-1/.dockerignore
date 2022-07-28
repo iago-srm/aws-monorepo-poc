@@ -2,7 +2,7 @@
 **/build
 **/__test__
 **/*.spec.*s
-packages/api-1/
+packages/api-2/
 packages/web-app/
 **/infra
 npm-debug.log

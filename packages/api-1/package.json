@@ -6,14 +6,17 @@
   "scripts": {
     "test": "jest --watchAll",
     "test:ci": "jest",
-    "start": "node -r ts-node/register/transpile-only ./build/index.js",
-    "build": "tsc",
+    "start": "npx prisma migrate deploy && node -r ts-node/register/transpile-only ./build/index.js",
+    "build": "npx prisma generate && tsc",
     "dev": "ts-node-dev ./src/index.ts",
     "docker:build": "docker build -t aws-monorepo-poc-api-1 -f ./Dockerfile ../..",
-    "docker:tag": "docker tag aws-monorepo-poc-api-1:latest 553239741950.dkr.ecr.us-east-1.amazonaws.com/aws-monorepo-poc/api-1:v1",
-    "ecr:push": "docker push 553239741950.dkr.ecr.us-east-1.amazonaws.com/aws-monorepo-poc/api-1:latest"
+    "docker:exec": "docker exec -ti api-1 /bin/sh"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^4.0.0",
+    "dotenv": "^16.0.1"
+  }
 }

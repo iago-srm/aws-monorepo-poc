@@ -1,14 +1,17 @@
 import express from "express";
 import cors from "cors";
 import { AddressInfo } from "net";
-import { Ping } from './ping';
+import { Ping, HealthCheck, Test } from './controllers';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-const server = app.listen(process.env.PORT || 3003, () => {
+const server = app.listen(process.env.PORT || 3008, () => {
   if (server) {
     const address = server.address() as AddressInfo;
     console.log(`Server is running in ${address.address}:${address.port}`);
@@ -17,4 +20,6 @@ const server = app.listen(process.env.PORT || 3003, () => {
   }
 });
 
-app.get('/ping', Ping);
+app.get('/', HealthCheck);
+app.get('/api-1/ping', Ping);
+app.post('/api-1/test', Test);

@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:lts
 
 WORKDIR /app
 
@@ -12,6 +12,8 @@ RUN npm i
 WORKDIR /app/packages/api-1
 
 RUN npm run build
+
+ENV PORT=3006
 
 EXPOSE 3006
 

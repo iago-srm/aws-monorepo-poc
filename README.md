@@ -11,3 +11,6 @@
 - Login no ecr com o Docker `aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 553239741950.dkr.ecr.us-east-1.amazonaws.com`
 
 ## Github Actions
+
+## Prisma
+- At every schema change, run `npx prisma migrate dev --name <some-name>`. This will produce a migratio file that will be version controlled. This file will show up in the next release's container and will be applied to the staging/prod db.
