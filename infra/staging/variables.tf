@@ -15,3 +15,15 @@ variable "environment" {
   type    = string
   default = "staging"
 }
+
+variable "db_password" {
+  type = string
+}
+
+variable "domain_name" {
+  type = string
+}
+
+variable "api_url" {
+  type = string
+}

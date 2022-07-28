@@ -1,5 +1,5 @@
 resource "aws_iam_role" "consumer_lambda" {
-  name = "consumer_lambda"
+  name = "${var.name}-consumer_lambda"
 
   assume_role_policy = jsonencode(
     {

@@ -13,3 +13,8 @@ variable "environment" {
 variable "env_api_url" {
   type = string
 }
+
+variable "lambda-bucket_name" {
+  type = string
+  default = "lambda-bucket-asdsadadadasda"
+}

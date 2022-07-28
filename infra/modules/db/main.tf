@@ -46,7 +46,7 @@ resource "aws_db_instance" "this" {
   allocated_storage      = 5
   engine                 = "postgres"
   engine_version         = "13.4"
-  username               = "postgres"
+  username               = var.db_user
   password               = var.db_password
   db_subnet_group_name   = aws_db_subnet_group.this.name
   vpc_security_group_ids = [aws_security_group.pgsecgrp.id]

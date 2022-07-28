@@ -8,3 +8,5 @@ terraform.tfplan
 terraform.tfstate
 *.backup
 **/generated
+*.tfvars
+**/*.zip

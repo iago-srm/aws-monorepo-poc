@@ -1,10 +1,10 @@
 resource "aws_sqs_queue" "auth-domain-deadletter_queue" {
-  name = "auth-domain-deadletter_queue"
+  name = "${var.name}-deadletter_queue-${var.environment}"
   tags = var.tags
 }
 
 resource "aws_sqs_queue" "auth-domain-queue" {
-  name                      = "auth-domain-queue"
+  name                      = "${var.name}-queue-${var.environment}"
   delay_seconds             = 90
   max_message_size          = 2048
   message_retention_seconds = 86400

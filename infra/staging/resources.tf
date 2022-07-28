@@ -1,3 +1,9 @@
+data "aws_acm_certificate" "this" {
+  domain      = var.domain_name
+  types       = ["AMAZON_ISSUED"]
+  most_recent = true
+}
+
 module "ecs" {
   source = "../modules/ecs"
 
@@ -7,9 +13,7 @@ module "ecs" {
   environment = var.environment
 
   public_subnet_ids = module.vpc.public_subnet_ids
-  # domain_name       = "isrm.link"
-  # subdomain_name    = "api.language-app"
-  certificate_arn = "arn:aws:acm:us-east-1:553239741950:certificate/87be9d27-ad1f-47f1-ad2d-aabbe95d4e6a"
+  certificate_arn = data.aws_acm_certificate.this.arn
   default_tg_arn  = module.server-api-1.tg_arn
 }
 
@@ -21,13 +25,15 @@ module "vpc" {
   environment = var.environment
 }
 
-# module "sqs" {
-#   source = "./sqs"
+module "sqs" {
+  source = "../modules/sqs"
 
-#   name = "${var.name}"
-#   tags = "${var.tags}"
-#   environment = "${var.environment}"
-# }
+  name = "${var.name}"
+  tags = "${var.tags}"
+  environment = "${var.environment}"
+
+  env_api_url = var.api_url
+}
 
 module "cicd-api-1" {
   source = "../modules/cicd"
@@ -50,6 +56,10 @@ module "cicd-api-2" {
   project-name = var.name
 }
 
+resource "aws_s3_bucket" "domain_bucket" {
+  bucket = "${var.name}-domain-${var.environment}"
+}
+
 module "server-api-1" {
   source = "../modules/server"
 
@@ -59,13 +69,15 @@ module "server-api-1" {
 
   server-name      = "api-1"
   alb_listener_arn = module.ecs.alb_listener_arn
-  container_image  = "553239741950.dkr.ecr.us-east-1.amazonaws.com/aws-monorepo-poc/api-1:latest"
+  container_image  = "${module.cicd-api-1.repository_url}:latest"
   alb_id           = module.ecs.alb.id
   cluster_id       = module.ecs.cluster_id
   vpc_id           = module.vpc.vpc_id
   subnet_id        = module.vpc.private_subnet_id
 
-  env_database_url = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:5432/api1"
+  env_database_url = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:5432/api-1"
+  env_queue_url = module.sqs.queue_url
+  env_bucket_name = aws_s3_bucket.domain_bucket.bucket_domain_name
 }
 
 module "server-api-2" {
@@ -77,13 +89,13 @@ module "server-api-2" {
 
   server-name      = "api-2"
   alb_listener_arn = module.ecs.alb_listener_arn
-  container_image  = "553239741950.dkr.ecr.us-east-1.amazonaws.com/aws-monorepo-poc/api-2:latest"
+  container_image  = "${module.cicd-api-2.repository_url}:latest"
   alb_id           = module.ecs.alb.id
   cluster_id       = module.ecs.cluster_id
   vpc_id           = module.vpc.vpc_id
   subnet_id        = module.vpc.private_subnet_id
 
-  env_database_url = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:5432/api2"
+  env_database_url = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:5432/api-2"
 }
 
 module "db" {
@@ -95,7 +107,7 @@ module "db" {
 
   vpc_id            = module.vpc.vpc_id
   public_subnet_ids = module.vpc.public_subnet_ids[*]
-  db_password       = "supersecret"
+  db_password       = var.db_password
 }
 
 output "rds_hostname" {

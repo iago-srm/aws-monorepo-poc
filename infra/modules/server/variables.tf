@@ -46,3 +46,13 @@ variable "subnet_id" {
 variable "env_database_url" {
   type = string
 }
+
+variable "env_queue_url" {
+  type = string
+  default = ""
+}
+
+variable "env_bucket_name" {
+  type = string
+  default = ""
+}

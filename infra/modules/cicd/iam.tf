@@ -68,7 +68,8 @@ resource "aws_iam_role_policy" "this" {
         "ecr:GetAuthorizationToken",
         "ecr:InitiateLayerUpload",
         "ecr:PutImage",
-        "ecr:UploadLayerPart"
+        "ecr:UploadLayerPart",
+        "ecr:BatchGetImage"
       ],
       "Resource": "*",
       "Effect": "Allow"

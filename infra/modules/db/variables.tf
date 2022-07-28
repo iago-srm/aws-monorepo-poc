@@ -21,3 +21,8 @@ variable "public_subnet_ids" {
 variable "db_password" {
   type = string
 }
+
+variable "db_user" {
+  type = string
+  default = "postgres"
+}
