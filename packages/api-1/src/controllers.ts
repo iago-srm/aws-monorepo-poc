@@ -41,7 +41,7 @@ export const Test = async (req: Request, res: Response) => {
            attr2: "nome",
            attr3: [1,2,3]
        },
-       QueueUrl: process.env.SQS_URL
+       QueueUrl: process.env.QUEUE_URL
      };
     const response = await sendMessage(message);
     
