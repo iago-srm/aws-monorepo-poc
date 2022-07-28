@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "intall:ci": "npm run ci",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "create-staging-dbs": "psql postgres://postgres:supersecret@main.cc0qmkg5rwaj.us-east-1.rds.amazonaws.com:5432 -a -q -f ./create-dbs.sql",
+    "psql:staging:db": "psql postgres://postgres:supersecret@main.cc0qmkg5rwaj.us-east-1.rds.amazonaws.com:5432",
+    "psql:local:db": "docker exec -ti aws-monorepo-poc-postgres psql -U postgres -h localhost -p 5432"
   },
   "workspaces": [
     "packages/*"

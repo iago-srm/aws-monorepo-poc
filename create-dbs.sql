@@ -1,0 +1,2 @@
+CREATE DATABASE "api-1";
+CREATE DATABASE "api-2";

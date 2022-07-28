@@ -2,10 +2,11 @@ import { Request, Response } from 'express';
 import { commonFunction } from 'common';
 import AWS, { S3 } from 'aws-sdk';
 import { promisify } from 'util';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../generated/client';
+
 export const Ping = (req: Request, res: Response) => {
     
-    return res.send(`Pong - server 1 - v3.1 - ${process.env.DATABASE_URL}`);
+    return res.send(`Pong - server 1`);
 }
 
 export const HealthCheck = (req: Request, res: Response) => {
@@ -23,7 +24,7 @@ export const Test = async (req: Request, res: Response) => {
     });
 
     const prisma = new PrismaClient();
-    await prisma.user.create({
+    await prisma.user1.create({
         data: {
             name: req.body.name,
             email: req.body.email

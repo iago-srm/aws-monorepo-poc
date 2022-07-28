@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --watchAll",
     "test:ci": "jest",
-    "start": "node -r ts-node/register/transpile-only ./build/index.js",
+    "start": "npx prisma migrate deploy && node -r ts-node/register/transpile-only ./build/index.js",
     "build": "npx prisma generate && tsc",
     "dev": "ts-node-dev ./src/index.ts",
     "docker:build": "docker build -t aws-monorepo-poc-api-1 -f ./Dockerfile ../..",

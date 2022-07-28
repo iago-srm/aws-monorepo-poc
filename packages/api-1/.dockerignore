@@ -5,3 +5,4 @@
 packages/api-2/
 packages/web-app/
 npm-debug.log
+**/generated

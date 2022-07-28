@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { commonFunction } from 'common';
 import AWS, { S3 } from 'aws-sdk';
 import { promisify } from 'util';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../generated/client';
 
 export const Ping = (req, res) => res.send(`Pong - Server 2`);
 
@@ -22,7 +22,7 @@ export const Test = async (req: Request, res: Response) => {
     });
 
     const prisma = new PrismaClient();
-    await prisma.user.create({
+    await prisma.user2.create({
         data: {
             name: req.body.name,
             email: req.body.email

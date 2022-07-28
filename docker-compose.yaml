@@ -24,10 +24,9 @@ services:
 
   api-2:
     image: aws-monorepo-poc/api-2
-    
     build: 
       context: .
-      dockerfile: packages/api-1/Dockerfile
+      dockerfile: packages/api-2/Dockerfile
     container_name: api-2
     # entrypoint: "npm run dev"
     entrypoint: "tail -f /dev/null"

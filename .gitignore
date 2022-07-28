@@ -7,3 +7,4 @@ build/
 terraform.tfplan
 terraform.tfstate
 *.backup
+**/generated
