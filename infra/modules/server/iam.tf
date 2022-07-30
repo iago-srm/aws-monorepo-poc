@@ -82,3 +82,28 @@ resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment" {
   role       = aws_iam_role.ecs_task_role.name
   policy_arn = aws_iam_policy.sqs.arn
 }
+
+resource "aws_iam_policy" "ssm" {
+  name        = "${var.name}-task-policy-ssm-${var.server-name}-${var.environment}"
+  description = "Policy that allows access to SSM"
+
+  policy = <<EOF
+{
+   "Version": "2012-10-17",
+   "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "ecs:ExecuteCommand"
+        ],
+        "Resource": "*"
+      }
+   ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "ecs-ssm" {
+  role       = aws_iam_role.ecs_task_role.name
+  policy_arn = aws_iam_policy.sqs.arn
+}

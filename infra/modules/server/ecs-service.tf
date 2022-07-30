@@ -11,7 +11,9 @@ resource "aws_ecs_task_definition" "this" {
       name      = "${var.server-name}"
       image     = "${var.container_image}"
       environment = [
-        { "Name" = "DATABASE_URL", "Value" = "${var.env_database_url}" }  
+        { "Name" = "DATABASE_URL", "Value" = "${var.env_database_url}" },
+        { "Name" = "BUCKET_NAME", "Value" = "${var.env_bucket_name}" },  
+        { "Name" = "QUEUE_URL", "Value" = "${var.env_queue_url}" }  
       ]
       logConfiguration = {
         "logDriver": "awslogs",

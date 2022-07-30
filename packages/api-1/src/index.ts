@@ -3,6 +3,7 @@ import cors from "cors";
 import { AddressInfo } from "net";
 import { Ping, HealthCheck, Test } from './controllers';
 import dotenv from 'dotenv';
+import 'express-async-errors';
 
 dotenv.config();
 
@@ -23,3 +24,7 @@ const server = app.listen(process.env.PORT || 3008, () => {
 app.get('/', HealthCheck);
 app.get('/api-1/ping', Ping);
 app.post('/api-1/test', Test);
+
+app.use((err, req, res, _) => {
+  res.status(500).send(err);
+});

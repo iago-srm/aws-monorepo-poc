@@ -75,7 +75,7 @@ module "server-api-1" {
   vpc_id           = module.vpc.vpc_id
   subnet_id        = module.vpc.private_subnet_id
 
-  env_database_url = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:5432/api-1"
+  env_database_url = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:${module.db.rds_port}/api-1"
   env_queue_url = module.sqs.queue_url
   env_bucket_name = aws_s3_bucket.domain_bucket.bucket_domain_name
 }
@@ -95,7 +95,7 @@ module "server-api-2" {
   vpc_id           = module.vpc.vpc_id
   subnet_id        = module.vpc.private_subnet_id
 
-  env_database_url = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:5432/api-2"
+  env_database_url = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:${module.db.rds_port}/api-2"
 }
 
 module "db" {
