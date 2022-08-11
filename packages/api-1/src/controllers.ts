@@ -36,14 +36,14 @@ export const Test = async (req: Request, res: Response) => {
     const message = {
         // Remove DelaySeconds parameter and value for FIFO queues
        DelaySeconds: 10,
-       MessageBody: {
+       MessageBody: `{
            attr: 1,
            attr2: "nome",
            attr3: [1,2,3]
-       },
+       }`,
        QueueUrl: process.env.QUEUE_URL
      };
-    const response = await sendMessage(JSON.stringify(message));
+    const response = await sendMessage(message);
     
     return res.send(`
         Server 1 | 
