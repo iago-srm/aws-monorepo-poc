@@ -43,7 +43,7 @@ export const Test = async (req: Request, res: Response) => {
        },
        QueueUrl: process.env.QUEUE_URL
      };
-    const response = await sendMessage(message);
+    const response = await sendMessage(JSON.stringify(message));
     
     return res.send(`
         Server 1 | 
