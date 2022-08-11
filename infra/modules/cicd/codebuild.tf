@@ -6,7 +6,7 @@ resource "aws_s3_bucket" "build_cache" {
 resource "aws_codebuild_project" "this" {
   name          = "${var.name}-${var.server-name}-${var.environment}"
   build_timeout = "5"
-  service_role  = aws_iam_role.this.arn
+  service_role  = aws_iam_role.codebuild.arn
 
   artifacts {
     # type = "CODEPIPELINE"
@@ -37,7 +37,7 @@ resource "aws_codebuild_project" "this" {
 
     environment_variable {
       name  = "IMAGE_REPO_NAME"
-      value = "aws-monorepo-poc/${var.server-name}"
+      value = "${var.name}/${var.server-name}"
     }
   }
 
@@ -56,7 +56,7 @@ resource "aws_codebuild_project" "this" {
   source {
     type = "GITHUB"
     # type            = "CODEPIPELINE"
-    location        = "https://github.com/iago-srm/aws-monorepo-poc.git"
+    location        = "${var.git_repo}"
     git_clone_depth = 1
     buildspec       = "packages/${var.server-name}/buildspec.yml"
   }

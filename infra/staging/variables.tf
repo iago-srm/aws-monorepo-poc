@@ -8,7 +8,10 @@ variable "tags" {
 
 variable "name" {
   type    = string
-  default = "aws-monorepo-poc"
+}
+
+variable "github_repo" {
+  type    = string
 }
 
 variable "environment" {
@@ -25,5 +28,13 @@ variable "domain_name" {
 }
 
 variable "api_url" {
+  type = string
+}
+
+variable "admin_ip" {
+  type = string
+}
+
+variable "key_pair_name" {
   type = string
 }

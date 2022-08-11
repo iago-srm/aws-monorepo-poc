@@ -90,14 +90,4 @@ resource "aws_alb_listener" "https" {
   tags = var.tags
 }
 
-output "alb_dns" {
-  value = aws_lb.main.dns_name
-}
 
-output "alb_listener_arn" {
-  value = aws_alb_listener.https.arn
-}
-
-output "alb" {
-  value = aws_lb.main
-}

@@ -80,11 +80,15 @@ resource "aws_ecs_service" "this" {
   launch_type                        = "FARGATE"
   cluster                            = var.cluster_id
   task_definition                    = aws_ecs_task_definition.this.arn
-  desired_count                      = 0
+  desired_count                      = 1
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
   scheduling_strategy                = "REPLICA"
 
+  deployment_controller {
+    type = "CODE_DEPLOY"
+  }
+  
   network_configuration {
     security_groups  = [aws_security_group.ecs_security_group.id]
     subnets          = [var.subnet_id]
@@ -92,7 +96,7 @@ resource "aws_ecs_service" "this" {
   }
 
   load_balancer {
-    target_group_arn = aws_alb_target_group.this.arn
+    target_group_arn = aws_alb_target_group.green.arn
     container_name   = var.server-name
     container_port   = var.container_port
   }

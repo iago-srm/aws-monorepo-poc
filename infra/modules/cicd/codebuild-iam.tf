@@ -1,4 +1,4 @@
-resource "aws_iam_role" "this" {
+resource "aws_iam_role" "codebuild" {
   name = "${var.name}-codebuild-${var.server-name}-${var.environment}"
 
   assume_role_policy = <<EOF
@@ -19,8 +19,8 @@ EOF
   tags = var.tags
 }
 
-resource "aws_iam_role_policy" "this" {
-  role = aws_iam_role.this.name
+resource "aws_iam_role_policy" "codebuild" {
+  role = aws_iam_role.codebuild.name
 
   policy = jsonencode(
 {
@@ -58,7 +58,7 @@ resource "aws_iam_role_policy" "this" {
         "codebuild:BatchPutCodeCoverages"
       ],
       "Resource": [
-          "*"
+        "*"
       ]
     },
     {
@@ -87,3 +87,4 @@ resource "aws_iam_role_policy" "this" {
   ]
 })
 }
+

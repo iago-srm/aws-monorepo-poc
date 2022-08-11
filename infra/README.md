@@ -8,3 +8,6 @@
 - `terraform plan -out prod-plan.out -var-file="prod.tfvars"`
 
 Arquivo variables.tf é necessário para definir as variáveis (editor usa isso pra sugestões), e os *.tfvars definem os valores.
+
+Para acessar output variables
+`terraform output var_name`

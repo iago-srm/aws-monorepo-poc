@@ -1,6 +1,7 @@
 resource "aws_db_subnet_group" "this" {
   name       = "main"
-  subnet_ids = var.public_subnet_ids
+  # subnet_ids = var.public_subnet_ids
+  subnet_ids = var.private_subnet_ids
 
   tags = var.tags
 }
@@ -51,28 +52,9 @@ resource "aws_db_instance" "this" {
   db_subnet_group_name   = aws_db_subnet_group.this.name
   vpc_security_group_ids = [aws_security_group.pgsecgrp.id]
   parameter_group_name   = aws_db_parameter_group.this.name
-  publicly_accessible    = true
+  publicly_accessible    = false
   skip_final_snapshot    = true
 
   tags = var.tags
 }
 
-output "rds_hostname" {
-  description = "RDS instance hostname"
-  value       = aws_db_instance.this.address
-}
-
-output "rds_port" {
-  description = "RDS instance port"
-  value       = aws_db_instance.this.port
-}
-
-output "rds_username" {
-  description = "RDS instance root username"
-  value       = aws_db_instance.this.username
-}
-
-output "rds_password" {
-  description = "RDS instance root username"
-  value       = aws_db_instance.this.password
-}

@@ -1,0 +1,6 @@
+#!bin/bash
+# sudo amazon-linux-extras install postgresql10 -y
+echo "CREATE DATABASE \"api-1\"; \n CREATE DATABASE \"api-2\";" >> create-dbs.sql
+# chmod 777 ./create-dbs.sql
+echo ${database_url} >> url.txt
+# psql ${database_url}  -a -q -f ./create-dbs.sql

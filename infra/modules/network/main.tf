@@ -24,7 +24,7 @@ resource "aws_subnet" "public_two" {
   tags = var.tags
 }
 
-resource "aws_subnet" "private" {
+resource "aws_subnet" "private_one" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.2.0/24"
   availability_zone = "us-east-1a"
@@ -32,6 +32,13 @@ resource "aws_subnet" "private" {
   tags = var.tags
 }
 
+resource "aws_subnet" "private_two" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.3.0/24"
+  availability_zone = "us-east-1b"
+
+  tags = var.tags
+}
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
@@ -86,8 +93,13 @@ resource "aws_route" "private" {
   nat_gateway_id         = aws_nat_gateway.main.id
 }
 
-resource "aws_route_table_association" "private" {
-  subnet_id      = aws_subnet.private.id
+resource "aws_route_table_association" "private_one" {
+  subnet_id      = aws_subnet.private_one.id
+  route_table_id = aws_route_table.private.id
+}
+
+resource "aws_route_table_association" "private_two" {
+  subnet_id      = aws_subnet.private_two.id
   route_table_id = aws_route_table.private.id
 }
 
@@ -99,6 +111,6 @@ output "public_subnet_ids" {
   value = [aws_subnet.public_one.id, aws_subnet.public_two.id]
 }
 
-output "private_subnet_id" {
-  value = aws_subnet.private.id
+output "private_subnet_ids" {
+  value = [aws_subnet.private_one.id, aws_subnet.private_two.id]
 }
