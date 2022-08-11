@@ -49,9 +49,9 @@ resource "aws_security_group" "this" {
 
 resource "aws_instance" "bastion_host" {
 
-  user_data = base64encode(templatefile("${path.module}/user-data.tftpl", {
-    database_url = var.database_url,
-  }))
+  # user_data = base64encode(templatefile("${path.module}/user-data.tftpl", {
+  #   database_url = var.database_url,
+  # }))
     subnet_id = var.subnet_id
     launch_template {
       id = aws_launch_template.this.id

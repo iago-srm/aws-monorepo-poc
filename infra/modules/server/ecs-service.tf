@@ -85,9 +85,9 @@ resource "aws_ecs_service" "this" {
   deployment_maximum_percent         = 200
   scheduling_strategy                = "REPLICA"
 
-  deployment_controller {
-    type = "CODE_DEPLOY"
-  }
+  # deployment_controller {
+  #   type = "CODE_DEPLOY"
+  # }
   
   network_configuration {
     security_groups  = [aws_security_group.ecs_security_group.id]

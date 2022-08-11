@@ -78,9 +78,35 @@ resource "aws_iam_policy" "sqs" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment" {
+resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment_sqs" {
   role       = aws_iam_role.ecs_task_role.name
   policy_arn = aws_iam_policy.sqs.arn
+}
+
+
+resource "aws_iam_policy" "s3" {
+  name        = "${var.name}-task-policy-s3-${var.server-name}-${var.environment}"
+  description = "Policy that allows access to S3"
+
+  policy = <<EOF
+{
+   "Version": "2012-10-17",
+   "Statement": [
+       {
+           "Effect": "Allow",
+           "Action": [
+              "s3:*"
+           ],
+           "Resource": "*"
+       }
+   ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment_s3" {
+  role       = aws_iam_role.ecs_task_role.name
+  policy_arn = aws_iam_policy.s3.arn
 }
 
 resource "aws_iam_policy" "ssm" {

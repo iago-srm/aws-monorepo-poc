@@ -91,7 +91,7 @@ module "server-api-1" {
 
   env_database_url = "postgres://${module.db.rds_username}:${module.db.rds_password}@${module.db.rds_hostname}:${module.db.rds_port}/api-1"
   env_queue_url = module.sqs.queue_url
-  env_bucket_name = aws_s3_bucket.domain_bucket.bucket_domain_name
+  env_bucket_name = aws_s3_bucket.domain_bucket.bucket
 }
 
 module "server-api-2" {

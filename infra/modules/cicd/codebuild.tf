@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "build_cache" {
   bucket = "${var.name}-build-cache-${var.server-name}-${var.environment}"
+  force_destroy = true
   tags = var.tags
 }
 
@@ -64,21 +65,6 @@ resource "aws_codebuild_project" "this" {
   tags = var.tags
 }
 
-# resource "aws_codepipeline_webhook" "bar" {
-#   name            = "develop-staging-webhook-github"
-#   authentication  = "GITHUB_HMAC"
-#   target_action   = "Source"
-#   target_pipeline = aws_codepipeline.this.name
-
-#   authentication_configuration {
-#     secret_token = local.webhook_secret
-#   }
-
-#   filter {
-#     json_path    = "$.ref"
-#     match_equals = "refs/heads/develop"
-#   }
-# }
 resource "aws_codebuild_webhook" "example" {
   project_name = aws_codebuild_project.this.name
   build_type   = "BUILD"
