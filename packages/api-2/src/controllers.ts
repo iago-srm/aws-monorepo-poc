@@ -4,7 +4,7 @@ import { commonFunction } from 'common';
 import { promisify } from 'util';
 import { PrismaClient } from '../generated/client';
 
-export const Ping = (req, res) => res.send(`Pong - Server 2`);
+export const Ping = (req, res) => res.send(`Pong - Server 2  - Testing CICD 1`);
 
 
 export const HealthCheck = (req: Request, res: Response) => {
