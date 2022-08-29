@@ -38,3 +38,9 @@ variable "admin_ip" {
 variable "key_pair_name" {
   type = string
 }
+
+variable "microsservices" {
+  description = "The microsservices in this architecture"
+  type = list(string)
+  default = ["api-1", "api-2"]
+}

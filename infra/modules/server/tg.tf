@@ -1,5 +1,5 @@
 resource "aws_alb_target_group" "green" {
-  name        = "${var.server-name}-green-${var.environment}"
+  name        = "${var.name}-green-${var.environment}"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -19,7 +19,7 @@ resource "aws_alb_target_group" "green" {
 }
 
 resource "aws_alb_target_group" "blue" {
-  name        = "${var.server-name}-blue-${var.environment}"
+  name        = "${var.name}-blue-${var.environment}"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id

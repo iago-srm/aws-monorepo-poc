@@ -1,11 +1,11 @@
 resource "aws_s3_bucket" "build_cache" {
-  bucket = "${var.name}-build-cache-${var.server-name}-${var.environment}"
+  bucket = "${var.name}-build-cache"
   force_destroy = true
   tags = var.tags
 }
 
 resource "aws_codebuild_project" "this" {
-  name          = "${var.name}-${var.server-name}-${var.environment}"
+  name          = "${var.name}"
   build_timeout = "5"
   service_role  = aws_iam_role.codebuild.arn
 
@@ -38,14 +38,14 @@ resource "aws_codebuild_project" "this" {
 
     environment_variable {
       name  = "IMAGE_REPO_NAME"
-      value = "${var.name}/${var.server-name}"
+      value = "${var.project-name}/${var.server-name}"
     }
   }
 
   logs_config {
     cloudwatch_logs {
-      group_name  = "${var.server-name}-build-log-group-${var.environment}"
-      stream_name = "${var.server-name}-build-log-stream-${var.environment}"
+      group_name  = "${var.name}-build-log-group"
+      stream_name = "${var.name}-build-log-stream"
     }
 
     s3_logs {
@@ -76,7 +76,7 @@ resource "aws_codebuild_webhook" "example" {
 
     filter {
       type    = "HEAD_REF"
-      pattern = "${var.environment}"
+      pattern = "staging"
     }
 
     filter {

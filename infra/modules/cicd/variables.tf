@@ -2,11 +2,11 @@ variable "tags" {
   type = map(string)
 }
 
-variable "name" {
+variable "project-name" {
   type = string
 }
 
-variable "environment" {
+variable "name" {
   type = string
 }
 
@@ -24,6 +24,7 @@ variable "ecs_cluster_name" {
 
 variable "ecs_service_name" {
   type = string
+  default = ""
 }
 
 variable "alb_listener_http_arn" {
@@ -36,9 +37,11 @@ variable "alb_listener_https_arn" {
 
 variable "tg_blue_name" {
   type = string
+  default = ""
 }
 
 variable "tg_green_name" {
   type = string
+  default = ""
 }
 

@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "${var.name}-ecsTaskExecutionRole-${var.server-name}-${var.environment}"
+  name = "${var.name}-ecsTaskExecutionRole"
 
 inline_policy {
     name = "allow_create_log_groups"
@@ -39,7 +39,7 @@ resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-policy-attach
 }
 
 resource "aws_iam_role" "ecs_task_role" {
-  name = "${var.name}-ecsTaskRole-${var.server-name}-${var.environment}"
+  name = "${var.name}-ecsTaskRole"
 
   assume_role_policy = <<EOF
 {
@@ -59,7 +59,7 @@ EOF
 }
 
 resource "aws_iam_policy" "sqs" {
-  name        = "${var.name}-task-policy-sqs-${var.server-name}-${var.environment}"
+  name        = "${var.name}-task-policy-sqs"
   description = "Policy that allows access to SQS"
 
   policy = <<EOF
@@ -85,7 +85,7 @@ resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment_sqs" 
 
 
 resource "aws_iam_policy" "s3" {
-  name        = "${var.name}-task-policy-s3-${var.server-name}-${var.environment}"
+  name        = "${var.name}-task-policy-s3"
   description = "Policy that allows access to S3"
 
   policy = <<EOF
@@ -110,7 +110,7 @@ resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment_s3" {
 }
 
 resource "aws_iam_policy" "ssm" {
-  name        = "${var.name}-task-policy-ssm-${var.server-name}-${var.environment}"
+  name        = "${var.name}-task-policy-ssm"
   description = "Policy that allows access to SSM"
 
   policy = <<EOF

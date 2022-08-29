@@ -11,3 +11,4 @@ Arquivo variables.tf é necessário para definir as variáveis (editor usa isso 
 
 Para acessar output variables
 `terraform output var_name`
+
